@@ -1,0 +1,481 @@
+type: edu
+files:
+- name: robogotchi/robogotchi.py
+  visible: true
+  text: |
+    # Write your code here
+  learner_created: false
+- name: tests.py
+  visible: false
+  text: |+
+    from typing import List, Any
+    from hstest.stage_test import StageTest
+    from hstest.test_case import TestCase
+    from hstest.check_result import CheckResult
+    from hstest.exceptions import WrongAnswerException
+
+
+    class RoshamboTestParent(StageTest):
+
+        def prs_print_check(self, output, answer):
+
+            parsed_output = output.split("\n")
+            if not parsed_output:
+                raise WrongAnswerException("Make sure your program outputs all required lines.")
+            parsed_output = parsed_output[0].strip().split()
+            if not parsed_output:
+                raise WrongAnswerException("Make sure your program outputs results of the Rock-paper-scissors game in the required format.")
+            robot_answer = parsed_output[-1].lower().strip('.')
+            if robot_answer not in ['scissors', 'paper', 'rock']:
+                raise WrongAnswerException(f"A problem occurred during the processing of the following output:\n"
+                                           f"\"{output}\"\n"
+                                           f"The last word in the first line of this output is supposed to contain an option name:\n"
+                                           f"rock, paper or scissors.\n"
+                                           f"However, the last word of the first line does not seem to be equal to any of these words.")
+            ideal = self.check_who_won_ro(robot_answer=robot_answer,
+                                          human_answer=answer).split('\n')
+            ideal = [line for line in ideal if line]
+            for i in ideal:
+                if i.lower() not in output.lower():
+                    return False
+            return True
+
+        def check_who_won_num(self, human_answer, robot_answer, goal):
+            if abs(goal - human_answer) < abs(goal - robot_answer):
+                self.won_numbers += 1
+                return (f"Robot entered the number {robot_answer}."
+                        f"\nThe goal number is {goal}."
+                        f"\nYou won!")
+            elif abs(goal - human_answer) > abs(goal - robot_answer):
+                self.lost_numbers += 1
+                return (f"Robot entered the number {robot_answer}."
+                        f"\nThe goal number is {goal}."
+                        f"\nRobot won!")
+            else:
+                self.draw_numbers += 1
+                return (f"Robot entered the number {robot_answer}."
+                        f"\nThe goal number is {goal}."
+                        f"\nIt's a draw!")
+
+        def check_who_won_ro(self, human_answer, robot_answer):
+
+            if human_answer == 'paper':
+                if robot_answer == 'scissors':
+                    self.lost_roshambo += 1
+                    return f"Robot chose {robot_answer}\nRobot won!"
+                elif robot_answer == 'rock':
+                    self.won_roshambo += 1
+                    return f"Robot chose {robot_answer}\nYou won!"
+                else:
+                    self.draw_roshambo += 1
+                    return f"Robot chose {robot_answer}\nIt's a draw!"
+            elif human_answer == 'rock':
+                if robot_answer == 'paper':
+                    self.lost_roshambo += 1
+                    return f"Robot chose {robot_answer}\nRobot won!"
+                elif robot_answer == 'scissors':
+                    self.won_roshambo += 1
+                    return f"Robot chose {robot_answer}\nYou won!"
+                else:
+                    self.draw_roshambo += 1
+                    return f"Robot chose {robot_answer}\nIt's a draw!"
+            elif human_answer == 'scissors':
+                if robot_answer == 'rock':
+                    self.lost_roshambo += 1
+                    return f"Robot chose {robot_answer}\nRobot won!"
+                elif robot_answer == 'paper':
+                    self.won_roshambo += 1
+                    return f"Robot chose {robot_answer}\nYou won!"
+                else:
+                    self.draw_roshambo += 1
+                    return f"Robot chose {robot_answer}\nIt's a draw!"
+            else:
+                return 'No such option! Try again!\n'
+
+
+        def roshambo_what_prints_check(self, output):
+            if "what is your move?" not in output.lower():
+                return False
+            return True
+
+        def wrong_option_what_prints(self, output):
+            check = "invalid input" in output.lower() and 'try again' in output.lower()
+            if not check:
+                return False
+            return True
+
+        def normal_number_prints_check(self, output, number):
+            try:
+                parsed_output = output.split()
+                if "the robot" in output.lower():
+                    robot_answer = int(parsed_output[5].strip('.'))
+                    goal_number = int(parsed_output[10].strip('.'))
+                else:
+                    robot_answer = int(parsed_output[4].strip('.'))
+                    goal_number = int(parsed_output[9].strip('.'))
+                ideal = self.check_who_won_num(number, robot_answer, goal_number).split('\n')
+                ideal = [line for line in ideal if line][-1]
+                if ideal.lower() not in output.lower():
+                    return False
+                return True
+            except ValueError:
+                raise WrongAnswerException("The result of the game is formatted incorrectly.\n"
+                                         "Either the integer representing the goal number, \n"
+                                         "or the integer representing the robot's number wasn't found in the intended place.")
+
+
+        def numbers_what_prints_check(self, output):
+            if 'what is your number?' not in output.lower():
+                return False
+            return True
+
+        def numbers_exceptions(self, output, kind):
+            output = [line for line in output.lower().split('\n') if line][0]
+            if isinstance(kind, str):
+                if "a string is not a valid input" not in output:
+                    return False
+            elif kind > 1000000:
+                if "the number can't be bigger than 1000000" not in output:
+                    return False
+            elif kind < 0:
+                if "number can't be negative" not in output:
+                    return False
+            return True
+
+        def knife_exception(self, output):
+            check = 'no such option' in output.lower() and 'try again' in output.lower()
+            if not check:
+                return False
+            return True
+
+        def play_what_prints_check(self, output):
+            if "which game would you like to play?" not in output.lower():
+                return False
+            return True
+
+        def zerify_numbers_count(self, game):
+            if game == 'numbers':
+                self.won_numbers = 0
+                self.lost_numbers = 0
+                self.draw_numbers = 0
+            else:
+                self.won_roshambo = 0
+                self.lost_roshambo = 0
+                self.draw_roshambo = 0
+
+
+    class GamesTest1(RoshamboTestParent):
+
+        won_roshambo = 0
+        lost_roshambo = 0
+        draw_roshambo = 0
+
+        won_numbers = 0
+        lost_numbers = 0
+        draw_numbers = 0
+
+        def generate(self) -> List[TestCase]:
+            return [
+                TestCase(stdin=[self.func1, self.func2, self.func3, self.func4, self.func5]),
+                TestCase(stdin=[self.func6, self.func7, self.func8, self.func9, self.func10]),
+                TestCase(stdin=[self.func11, self.func12]),
+                TestCase(stdin=[self.func13, self.func14, self.func15]),
+                TestCase(stdin=[self.func16, self.func17, self.func18]),
+                TestCase(stdin=[self.func19, self.func20, self.func21, self.func22, self.func23],
+                         check_function=self.check_numbers),
+                TestCase(stdin=[self.func24, self.func25, self.func26],
+                         check_function=self.check_numbers),
+                TestCase(stdin=[self.func27, self.func28],
+                         check_function=self.check_numbers),
+                TestCase(stdin=[self.func29, self.func30, self.func31, self.func32, self.func33,
+                                self.func34, self.func35, self.func36],
+                         check_function=self.check_numbers)
+            ]
+
+        """Test 1"""
+
+        def func1(self, output):
+            if not self.play_what_prints_check(output):
+                return CheckResult.wrong("The program should ask the user which game to play")
+            return 'Rock-paper-scissors'
+
+        def func2(self, output):
+            if not self.roshambo_what_prints_check(output):
+                return CheckResult.wrong("The game should ask the user for their move")
+            return "paper"
+
+        def func3(self, output):
+            if not self.prs_print_check(output, 'paper'):
+                    return CheckResult.wrong("Make sure your output is correct and complete")
+            if not self.roshambo_what_prints_check(output):
+                return CheckResult.wrong("The game should ask the user for their move")
+            return 'rock'
+
+        def func4(self, output):
+            if not self.prs_print_check(output, 'rock'):
+                return CheckResult.wrong("Make sure your output is correct and complete")
+            if not self.roshambo_what_prints_check(output):
+                return CheckResult.wrong("The game should ask the user for their move")
+            return 'scissors'
+
+
+        def func5(self, output):
+            if not self.prs_print_check(output, 'scissors'):
+                return CheckResult.wrong("Make sure your output is correct and complete")
+            if not self.roshambo_what_prints_check(output):
+                return CheckResult.wrong("The game should ask the user for their move")
+            return 'exit game'
+
+        """Test 2"""
+
+        def func6(self, output):
+            self.zerify_numbers_count('roshambo')
+            if not self.play_what_prints_check(output):
+                return CheckResult.wrong("The program should ask the user which game to play")
+            return 'Rock-paper-scissors'
+
+        def func7(self, output):
+            if not self.roshambo_what_prints_check(output):
+                return CheckResult.wrong("The game should ask the user for their move")
+            return 'rock'
+
+        def func8(self, output):
+            if not self.prs_print_check(output, 'rock'):
+                return CheckResult.wrong("Make sure your output is correct and complete")
+            if not self.roshambo_what_prints_check(output):
+                return CheckResult.wrong("The game should ask the user for their move")
+            return 'knife'
+
+        def func9(self, output):
+            if not self.knife_exception(output):
+                return CheckResult.wrong("The program should inform the user about invalid input")
+            if not self.roshambo_what_prints_check(output):
+                return CheckResult.wrong("The game should ask the user for their move")
+            return 'rock'
+
+        def func10(self, output):
+            if not self.prs_print_check(output, 'rock'):
+                return CheckResult.wrong("Make sure your output is correct and complete")
+            if not self.roshambo_what_prints_check(output):
+                return CheckResult.wrong("The game should ask the user for their move")
+            return 'exit game'
+
+        """Test 3"""
+
+        def func11(self, output):
+            self.zerify_numbers_count('roshambo')
+            if not self.play_what_prints_check(output):
+                return CheckResult.wrong("The program should ask the user which game to play")
+            return 'Rock-paper-scissors'
+
+        def func12(self, output):
+            if not self.roshambo_what_prints_check(output):
+                return CheckResult.wrong("The game should ask the user for their move")
+            return 'exit game'
+
+        """Test 4"""
+
+        def func13(self, output):
+            if not self.play_what_prints_check(output):
+                return CheckResult.wrong("The program should ask the user which game to play")
+            return 'Rock-paper-scissors'
+
+        def func14(self, output):
+            if not self.roshambo_what_prints_check(output):
+                return CheckResult.wrong("The game should ask the user for their move")
+            return 'knife'
+
+        def func15(self, output):
+            if not self.knife_exception(output):
+                return CheckResult.wrong("The program should inform the user about invalid input")
+            return 'exit game'
+
+        """Test 5"""
+
+        def func16(self, output):
+            if not self.play_what_prints_check(output):
+                return CheckResult.wrong("The program should offer to choose a game")
+            return 'Solitaire'
+
+        def func17(self, output):
+            to_check = "please choose a valid option: numbers or rock-paper-scissors?"
+            if to_check not in output.lower():
+                return CheckResult.wrong("The user should be informed about an invalid choice")
+            return 'Rock-paper-scissors'
+
+        def func18(self, output):
+            if not self.roshambo_what_prints_check(output):
+                return CheckResult.wrong("The game should ask the user for their move")
+            return 'exit game'
+
+        """Test 6"""
+
+        def func19(self, output):
+            if not self.play_what_prints_check(output):
+                return CheckResult.wrong("The program should offer to choose a game")
+            return 'Numbers'
+
+        def func20(self, output):
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong("The game should ask the user for their move")
+            return '-153'
+
+        def func21(self, output):
+            if not self.numbers_exceptions(output, -153):
+                return CheckResult.wrong("The program should inform the user about invalid input")
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return '7000003'
+
+        def func22(self, output):
+        #    if not self.numbers_exceptions(output, 7000003):
+        #        return CheckResult.wrong("The program should inform the user about invalid input")
+        #    if not self.numbers_what_prints_check(output):
+        #        return CheckResult.wrong('The program should ask the user for the number')
+        #    return 'shalosh'
+            return '-11'
+
+
+        def func23(self, output):
+            #if not self.numbers_exceptions(output, 'shalosh'):
+            #    return CheckResult.wrong("The program should inform the user about invalid input")
+            #if not self.numbers_what_prints_check(output):
+            #    return CheckResult.wrong('The program should ask the user for the number')
+            return 'exit game'
+
+        """Test 7"""
+
+        def func24(self, output):
+            self.zerify_numbers_count('numbers')
+            if not self.play_what_prints_check(output):
+                return CheckResult.wrong("The program should offer to choose a game")
+            return 'Numbers'
+
+        def func25(self, output):
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return '45'
+
+        def func26(self, output):
+            if not self.normal_number_prints_check(output, 45):
+                return CheckResult.wrong("The result is incorrect or impossible to parse")
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return 'exit game'
+
+        """Test 8"""
+
+        def func27(self, output):
+            self.zerify_numbers_count('numbers')
+            if not self.play_what_prints_check(output):
+                return CheckResult.wrong("The program should offer to choose a game")
+            return 'Numbers'
+
+        def func28(self, output):
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return 'exit game'
+
+        """Test 9"""
+
+        def func29(self, output):
+            if not self.play_what_prints_check(output):
+                return CheckResult.wrong("The program should offer to choose a game")
+            return 'Numbers'
+
+        def func30(self, output):
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return '543'
+
+        def func31(self, output):
+            if not self.normal_number_prints_check(output, 543):
+                return CheckResult.wrong("The result is incorrect or impossible to parse")
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return '-15'
+
+        def func32(self, output):
+            if not self.numbers_exceptions(output, -15):
+                return CheckResult.wrong("The program should inform the user about invalid input")
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return '7895'
+
+        def func33(self, output):
+            if not self.normal_number_prints_check(output, 7895):
+                return CheckResult.wrong("The result is incorrect or impossible to parse")
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return '5000001'
+
+        def func34(self, output):
+            if not self.numbers_exceptions(output, 5000001):
+                return CheckResult.wrong("The program should inform the user about invalid input")
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return '93175'
+
+        def func35(self, output):
+            if not self.normal_number_prints_check(output, 93175):
+                return CheckResult.wrong("The result is incorrect or impossible to parse")
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return 'hey there'
+
+        def func36(self, output):
+            if not self.numbers_exceptions(output, 'hey there'):
+                return CheckResult.wrong("The program should inform the user about invalid input")
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return 'exit game'
+
+        def check(self, reply: str, attach: Any) -> CheckResult:
+            ideal = f"You won: {self.won_roshambo}," \
+                    f"\nRobot won: {self.lost_roshambo}," \
+                    f"\nDraws: {self.draw_roshambo}."
+            ideal = ideal.split('\n')
+            reply = [line for line in reply.split('\n') if line][-3:]
+            if len(ideal) != len(reply):
+                return CheckResult.wrong("An incorrect number of lines for the stats found.\n"
+                                         "Expected {0} lines, found {1} line(s).\n"
+                                         "Make sure that you output different lines "
+                                         "or the number of the user's wins, robot's wins and draws.".format(len(ideal), len(reply)))
+            wrong_lines = [1 if line.lower() not in reply[i].lower() else 0 for i, line in enumerate(ideal)]
+            if sum(wrong_lines) > 0:
+                return CheckResult.wrong("The statistics is incorrect")
+            return CheckResult.correct()
+
+        def check_numbers(self, reply: str, attach: Any) -> CheckResult:
+            ideal = f"You won: {self.won_numbers}" \
+                    f"\nRobot won: {self.lost_numbers}" \
+                    f"\nDraws: {self.draw_numbers}"
+            ideal = ideal.split('\n')
+            reply = [line for line in reply.split('\n') if line][-3:]
+            if len(ideal) != len(reply):
+                return CheckResult.wrong("An incorrect number of lines for the stats found.\n"
+                                         "Expected {0} lines, found {1} line(s).\n"
+                                         "Make sure that you output different lines "
+                                         "or the number of the user's wins, robot's wins and draws.".format(len(ideal), len(reply)))
+            wrong_lines = [1 if line.lower() not in reply[i].lower() else 0 for i, line in enumerate(ideal)]
+            if sum(wrong_lines) > 0:
+                return CheckResult.wrong("The statistics is incorrect")
+            return CheckResult.correct()
+
+
+    if __name__ == '__main__':
+        GamesTest1().run_tests()
+
+
+
+
+
+  learner_created: false
+- name: robogotchi.py
+  visible: true
+  text: |
+    # Write your code here
+  learner_created: true
+feedback_link: https://hyperskill.org/projects/135/stages/721/implement#comment
+status: Solved
+record: 2

@@ -1,0 +1,7 @@
+type: framework
+content:
+- The game of numbers
+- Rock-Paper-Scissors
+- A simple robot
+- Robogotchi
+current_task: 3

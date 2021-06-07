@@ -1,0 +1,271 @@
+<h2>Description</h2>
+
+<p>Now that we have some good entertainment prepared, it is time to create the robot itself. In this stage, we will write an interface that will help us interact with the robopet. Your robot should get a name and have an opportunity to play, recharge, and cool off. The user should be able to get all the information about their robopet and quit the game.</p>
+
+<p>So, let's talk about the robot's features. All of them except for the name will change during the robot's lifetime; however, in the beginning, they have predefined values. Here are the robot's basic features:</p>
+
+<ul>
+	<li><code class="java">name</code>; the program prompts the user for the robot's name with the message <code class="java">How will you call your robot?</code>;</li>
+	<li><code class="java">level of battery</code> is set to 100;</li>
+	<li><code class="java">level of overheat</code> is set to 0;</li>
+	<li><code class="java">level of skills</code> is set to 0;</li>
+	<li><code class="java">level of boredom</code> is set to 0.</li>
+</ul>
+
+<p>There are a few ways that the user can interact with their robopet and improve its well-being parameters:</p>
+
+<ul>
+	<li><code class="java">play</code> allows the user to play one of the two possible games. Playing decreases the level of boredom by 20 and increases the level of overheat by 10 <strong>after the user enters 'game over'</strong>. To help the user keep track of the changes, print the following messages for them:<br>
+	<br>
+	<code class="java">{name of the robot}'s level of boredom was {previous value}. Now it is {current value}.</code><br>
+	<code class="java">{name of the robot}'s level of overheat was {previous value}. Now it is {current value}.</code></li>
+</ul>
+
+<p>           If the level of boredom equals 0, print this message after all the messages described above: </p>
+
+<p>          <code class="java">{name of the robot} is in a great mood!</code>  </p>
+
+<p>          <div class="alert alert-primary"> Do not forget to display the game stats after the game is played </div></p>
+
+<ul>
+	<li><code class="java">recharge</code> gives the robot a chance to boost its energy. If the battery level is 100, print <code class="java">{name of the robot} is charged!</code>. Otherwise, the option <code class="java">Recharge</code> increases the level of battery by 10, decreases the level of overheat by 5, and increases the level of boredom by 5. Display a suitable message for the user:<br>
+	<br>
+	<code class="java">{name of the robot}'s level of overheat was {previous value}. Now it is {current value}.</code><br>
+	<code class="java">{name of the robot}'s level of the battery was {previous value}. Now it is {current value}.</code><br>
+	<code class="java">{name of the robot}'s level of boredom was {previous value}. Now it is {current value}.</code><br>
+	<code class="java">{name of the robot} is recharged!</code></li>
+	<li><code class="java">sleeping mode</code> gives the robot a well-deserved break and allows it to cool off. If the level of overheat is 0, print the message <code class="java">{name of the robot} is cool!</code>. If the level of the overheat is equal to 0 after sleeping, print the message about changes of the values and then print the previous message. Otherwise, entering the sleeping mode decreases the level of overheat by 20. Print an appropriate message for the user:<br>
+	<br>
+	<code class="java">{name of the robot} cooled off!</code><br>
+	<code class="java">{name of the robot}'s level of overheat was {previous value}. Now it is {current value}.</code>.</li>
+	<li><code class="java">info</code> prints all the information about the robopet and its vitals. Here is the expected format:</li>
+</ul>
+
+<pre><code class="java">{name of the robot}'s stats are:
+battery is {value},
+overheat is {value},
+skill level is {value},
+boredom is {value}.</code></pre>
+
+<ul>
+	<li><code class="java">Exit</code> lets the user quit the game. Print the message <code class="java">Game over.</code> and exit the game.</li>
+</ul>
+
+<p>The values of all the attributes fall in the interval from 0 to 100. These are not merely numbers: the vitals tell us something about the pet's well-being, so some of them influence the behavior of the robot. Below we listed the possible effects these parameters can have on the robot. Note that they are listed in the order of preference, which means that if several of them happen at the same time, the first action to actually happen in the game should be the one higher in this list.</p>
+
+<ul>
+	<li>If the level of overheat<em> </em>reaches 100, the robot explodes, and the program prints the following message: <code class="java">The level of overheat reached 100, {the name of the robot} has blown up! Game over. Try again?</code>. Then, the game ends.</li>
+</ul>
+
+<p>Note that the possibility to exit the game and see the stats should always be available during the game, even if the robot's battery is at 0 or its boredom level is 100.</p>
+
+<p>The interface works as follows: when the game starts, the user is prompted to enter the robot's name with the message <code class="java">How will you call your robot?</code>. Then, the program should show the user the options:</p>
+
+<pre><code class="language-no-highlight">Available interactions with {name of the robot}:
+exit - Exit
+info - Check the vitals
+recharge - Recharge
+sleep - Sleep mode
+play - Play</code></pre>
+
+<p>If the user enters an invalid option, the program should notify the user by printing <code class="java">Invalid input, try again!</code>. The list of possible interactions should then be shown again. Keep displaying this list after each interaction with the robot.</p>
+
+<p><div class="alert alert-primary"> The robot's values cannot be negative </div></p>
+
+<h2>Objectives</h2>
+
+<p>In this stage, your program should:</p>
+
+<ol>
+	<li>Provide the following interactions: playing, recharging, sleeping;</li>
+	<li>Print the information about the robot: its level of battery, boredom, overheating, and skill;</li>
+	<li>Provide an option to quit the game;</li>
+	<li>Take the user's input;</li>
+	<li>If the input is correct, the chosen interaction should be performed. Otherwise, the program should inform the user and ask them for a valid input;</li>
+	<li>React when certain parameters reach critical levels.</li>
+</ol>
+
+<h2>Examples</h2>
+
+<p>The greater-than symbol followed by a space (<code class="java">&gt; </code>) represents the user's input. Note that it's not part of the input.</p>
+
+<p><strong>Example 1</strong></p>
+
+<pre><code class="language-no-highlight">How will you call your robot?
+&gt; Daniel
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+recharge - Recharge
+sleep - Sleep mode
+play - Play
+
+Choose:
+&gt; info
+
+Daniel's stats are: the battery is 100,
+overheat is 0,
+skill level is 0,
+boredom is 0.
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+recharge - Recharge
+sleep - Sleep mode
+play - Play
+
+Choose:
+&gt; fly to the moon
+
+Invalid input, try again!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+recharge - Recharge
+sleep - Sleep mode
+play - Play
+
+Choose:
+&gt; sleep
+
+Daneel is cool!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+recharge - Recharge
+sleep - Sleep mode
+play - Play
+
+Choose:
+&gt; play
+
+Which game would you like to play?
+&gt; Rock-paper-scissors
+
+What is your move?
+&gt; rock
+
+The robot chose scissors
+You won!
+
+What is your move?
+&gt; paper
+
+The robot chose scissors
+The robot won!
+
+What is your move?
+&gt; rock
+
+The robot chose paper
+The robot won!
+
+What is your move?
+&gt; exit game
+
+You won: 1,
+The robot won: 2,
+Draws: 0.
+
+Daniel's level of boredom was 0. Now it is 0.
+Daniel's level of overheat was 0. Now it is 10.
+Daniel is in a great mood!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+recharge - Recharge
+sleep - Sleep mode
+play - Play
+
+Choose:
+&gt; recharge
+
+Daniel is charged!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+recharge - Recharge
+sleep - Sleep mode
+play - Play
+
+Choose:
+&gt; sleep
+
+Daniel's level of overheat was 10. Now it is 0.
+
+Daniel is cool!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+recharge - Recharge
+sleep - Sleep mode
+play - Play
+
+Choose:
+&gt; exit
+
+Game over</code></pre>
+
+<p><strong>Example 2</strong></p>
+
+<pre><code class="language-no-highlight">Choose:
+&gt; play
+
+Which game would you like to play?
+&gt; numbers
+
+What is your number?
+&gt; 678
+
+The robot entered the number 518807.
+The goal number is 873547
+The robot won!
+
+What is your number?
+&gt; 6
+
+The robot entered the number 91265.
+The goal number is 374818
+The robot won!
+
+What is your number?
+&gt; exit game
+
+You won: 0,
+The robot won: 2,
+Draws: 0.
+
+Daniel's level of boredom was 0. Now it is 0.
+Daniel's level of overheat was 80. Now it is 90.
+Daniel is in a great mood!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+recharge - Recharge
+sleep - Sleep mode
+play - Play
+
+Choose:
+&gt; play
+
+Which game would you like to play?
+&gt; Rock-paper-scissors
+
+What is your move?
+&gt; paper
+
+The robot chose rock
+You won!
+
+What is your move?
+&gt; exit game
+
+The level of overheat reached 100, Daniel has blown up! Game over. Try again?</code></pre>

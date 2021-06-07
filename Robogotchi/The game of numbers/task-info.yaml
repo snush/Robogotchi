@@ -1,0 +1,237 @@
+type: edu
+files:
+- name: tests.py
+  visible: false
+  text: |
+    from typing import List, Any
+    from hstest.stage_test import StageTest
+    from hstest.test_case import TestCase
+    from hstest.check_result import CheckResult
+    from hstest.exceptions import WrongAnswerException
+
+    class NumbersTestParent(StageTest):
+
+        def check_who_won_num(self, human_answer, robot_answer, goal):
+            if abs(goal - human_answer) < abs(goal - robot_answer):
+                self.won += 1
+                return (f"\nThe robot entered the number {robot_answer}."
+                        f"\nThe goal number is {goal}.\nYou won!")
+            elif abs(goal - human_answer) > abs(goal - robot_answer):
+                self.lost += 1
+                return (f"\nThe robot entered the number {robot_answer}."
+                        f"\nThe goal number is {goal}.\nRobot won!")
+            else:
+                self.draw += 1
+                return (f"\nThe robot entered the number {robot_answer}."
+                        f"\nThe goal number is {goal}.\nIt's a draw!")
+
+        def parse_the_output(self, output):
+            parsed_output = output.split()
+            try:
+                check = len(parsed_output) >= 11 and isinstance(int(parsed_output[5].strip('.')), int) \
+                        and isinstance(int(parsed_output[10].strip('.')), int)
+            except ValueError:
+                raise WrongAnswerException("The result of the game is formatted incorrectly.\n"
+                                         "Make sure you output the following lines before outputting the outcome of the game:\n"
+                                         "\"The robot entered the number <N>. \n"
+                                         "The goal number is <N>.\"")
+            if not check:
+                raise WrongAnswerException("The result of the game is formatted incorrectly")
+            else:
+                robot_answer = int(parsed_output[5].strip('.'))
+                goal_number = int(parsed_output[10].strip('.'))
+            return robot_answer, goal_number
+
+
+        def numbers_what_prints_check(self, output):
+            if 'what is your number?' not in output.lower():
+                return False
+            return True
+
+        def numbers_exceptions(self, output, kind):
+            output = [line for line in output.lower().split('\n') if line][0]
+            if isinstance(kind, str):
+                if "a string is not a valid input" not in output:
+                    return False
+            elif kind > 1000000:
+                if "the number can't be bigger than 1000000" not in output:
+                    return False
+            elif kind < 0:
+                if "number can't be negative" not in output:
+                    return False
+            return True
+
+        def normal_number_prints_check(self, output, number):
+            robot_answer, goal = self.parse_the_output(output)
+            ideal = self.check_who_won_num(number, robot_answer, goal).split('\n')
+            ideal = [line for line in ideal if line][-1]
+            if ideal.lower() not in output.lower():
+                return False
+            return True
+
+
+    class NumbersTest1(NumbersTestParent):
+
+        won = 0
+        lost = 0
+        draw = 0
+
+        def generate(self) -> List[TestCase]:
+            return [
+                TestCase(stdin=[self.func1, self.func2]),
+                TestCase(stdin=[self.func3, self.func4]),
+                TestCase(stdin=[self.func5, self.func6, self.func7, self.func8,
+                                self.func9, self.func10, self.func11]),
+                TestCase(stdin=[self.func12, self.func13, self.func14, self.func15])
+            ]
+
+        def func1(self, output):
+
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return '45'
+
+        def func2(self, output):
+
+            if not self.normal_number_prints_check(output, 45):
+                return CheckResult.wrong("The result is incorrect")
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return 'exit game'
+
+        """Test 2"""
+
+        def func3(self, output):
+
+            self.won = 0
+            self.lost = 0
+            self.draw = 0
+            return 'exit game'
+
+        def func4(self, output):
+
+            if 'what is your number?' not in output.lower():
+                return CheckResult.wrong('The program should ask the user for the number')
+            return 'exit game'
+
+        """Test 3"""
+
+        def func5(self, output):
+
+            if 'what is your number?' not in output.lower():
+                return CheckResult.wrong('The program should ask the user for the number')
+            return '543'
+
+        def func6(self, output):
+
+            if not self.normal_number_prints_check(output, 543):
+                return CheckResult.wrong("The result is incorrect")
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return '-15'
+
+        def func7(self, output):
+
+            if not self.numbers_exceptions(output, -15):
+                return CheckResult.wrong("The program should inform the user about invalid input")
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return '7895'
+
+        def func8(self, output):
+
+            if not self.normal_number_prints_check(output, 7895):
+                return CheckResult.wrong("The result is incorrect")
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return '5000001'
+
+        def func9(self, output):
+
+            if not self.numbers_exceptions(output, 5000001):
+                return CheckResult.wrong("The program should inform the user about invalid input")
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return '93175'
+
+        def func10(self, output):
+
+            if not self.normal_number_prints_check(output, 93175):
+                return CheckResult.wrong("The result is incorrect")
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return 'hey there'
+
+        def func11(self, output):
+
+            if not self.numbers_exceptions(output, 'hey there'):
+                return CheckResult.wrong("The program should inform the user about invalid input")
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return 'exit game'
+
+        """Test 4"""
+
+        def func12(self, output):
+            self.won = 0
+            self.lost = 0
+            self.draw = 0
+            if 'what is your number?' not in output.lower():
+                return CheckResult.wrong('The program should ask the user for the number')
+            return '-153'
+
+        def func13(self, output):
+
+            if not self.numbers_exceptions(output, -153):
+                return CheckResult.wrong("The program should inform the user about invalid input")
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return '7000003'
+
+        def func14(self, output):
+
+            if not self.numbers_exceptions(output, 7000003):
+                return CheckResult.wrong("The program should inform the user about invalid input")
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return 'shalosh'
+
+        def func15(self, output):
+
+            if not self.numbers_exceptions(output, 'shalosh'):
+                return CheckResult.wrong("The program should inform the user about invalid input")
+            if not self.numbers_what_prints_check(output):
+                return CheckResult.wrong('The program should ask the user for the number')
+            return 'exit game'
+
+        def check(self, reply: str, attach: Any) -> CheckResult:
+            ideal = f"You won: {self.won}\nRobot won: {self.lost}\nDraws: {self.draw}"
+            ideal = ideal.split('\n')
+            reply = [line for line in reply.split('\n') if line][-3:]
+            if len(ideal) != len(reply):
+                return CheckResult.wrong("An incorrect number of lines for the stats found. \n"
+                                         "Expected {0} lines, found {1} line(s).\n"
+                                         "Make sure that you output different lines "
+                                         "or the number of the user's wins, robot's wins and draws.".format(len(ideal), len(reply)))
+            wrong_lines = [1 if line.lower() not in reply[i].lower() else 0 for i, line in enumerate(ideal)]
+            if sum(wrong_lines) > 0:
+                return CheckResult.wrong("Please, make sure that the statistics is calculated and printed correctly")
+            return CheckResult.correct()
+
+
+    if __name__ == '__main__':
+        NumbersTest1().run_tests()
+  learner_created: false
+- name: robogotchi/robogotchi.py
+  visible: true
+  text: |
+    # Write your code here
+  learner_created: false
+- name: robogotchi.py
+  visible: true
+  text: |
+    # Write your code here
+  learner_created: false
+feedback_link: https://hyperskill.org/projects/135/stages/720/implement#comment
+status: Solved
+record: 1

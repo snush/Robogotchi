@@ -1,0 +1,80 @@
+<h2>Description</h2>
+
+<p>Two games are better than one. Let's add another: a classic game called Rock-paper-scissors.</p>
+
+<p>The game is simple: the user makes their choice of weapon, and the robot's choice is generated. Their moves are then compared to determine the winner. Rock beats scissors but loses to paper, paper beats rock but loses to scissors, and scissors beat paper but not rock. As before, inputting <code class="java">exit game</code> finishes the program.</p>
+
+<p>Do not let the user cheat: "matches", "ponies", or "swords" are not valid options! If the user enters an invalid option, print <code class="java">No such option! Try again!</code>.</p>
+
+<p>Just like in the previous stage, keep the statistics and print it when the user decides to exit the game. The format remains the same:</p>
+
+<pre><code class="language-no-highlight">You won: [number of your wins],
+Robot won: [number of the robot's wins],
+Draws: [number of the draws].</code></pre>
+
+<p>Finally, since now we have not just one game but two, let the user choose which game to play.</p>
+
+<h2>Objectives</h2>
+
+<p>In this stage, your program should:</p>
+
+<ol>
+	<li>Prompt the user to pick a game with a message <code class="java">Which game would you like to play?</code>.</li>
+	<li>If they choose "Numbers", proceed with the game as in the previous stage. If they choose rock-paper-scissors, implement steps 3-6. If the user input is anything else than "Numbers" or "Rock-paper-scissors", print <code class="java">Please choose a valid option: Numbers or Rock-paper-scissors?</code>.</li>
+	<li>Take the user input, check its validity, and ask for a valid input if needed.</li>
+	<li>Output the robot's move: <code class="java">The robot chose [paper/rock/scissors]</code>.</li>
+	<li>Output the result using an appropriate message: <code class="java">You won!</code>, <code class="java">The robot won!</code>, or <code class="java">It's a draw<span style="color: #000000;">!</span></code><span style="color: #000000;">.</span></li>
+	<li>Keep taking input as long as the user wants to play.</li>
+	<li>Keep the game statistics and print it when the user decides to exit the game.</li>
+</ol>
+
+<h2>Examples</h2>
+
+<p>The greater-than symbol followed by a space (<code class="java">&gt; </code>) represents the user's input. Note that it's not part of the input.</p>
+
+<p><strong>Example 1</strong></p>
+
+<pre><code class="language-no-highlight">Which game would you like to play?
+&gt; Rock-paper-scissors
+
+What is your move?
+&gt; Paper
+The robot chose paper
+It's a draw!
+
+What is your move?
+&gt; rock
+The robot chose scissors
+You won!
+
+What is your move?
+&gt; gun
+No such option! Try again!
+
+What is your move?
+&gt; scissors
+The robot chose paper
+You won!
+
+What is your move?
+&gt; exit game
+
+You won: 2,
+The robot won: 0,
+Draws: 1</code></pre>
+
+<p><strong>Example 2</strong></p>
+
+<pre><code class="language-no-highlight">Which game would you like to play?
+&gt; Dominoes
+
+Please choose a valid option: Numbers or Rock-paper-scissors?
+
+&gt; Numbers
+
+What is your number?
+&gt; exit game
+
+You won: 0,
+The robot won: 0,
+Draws: 0.</code></pre>

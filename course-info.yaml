@@ -1,0 +1,12 @@
+type: hyperskill
+title: Robogotchi
+language: English
+summary: Do you remember Tamagotchi — small digital toy pets that you carry around
+  and take care of? They used to be popular in the 2000s, but since then, technology
+  really advanced, and now you can get an actual robopet! In this project, you will
+  write a robogotchi pet that you care for, play with, and oil every so often.<br/><br/>Learn
+  more at <a href="https://hyperskill.org">https://hyperskill.org/projects/135</a>
+programming_language: Python
+content:
+- Robogotchi
+mode: Study

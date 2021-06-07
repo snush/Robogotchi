@@ -1,0 +1,556 @@
+<h2>Description</h2>
+
+<p>Our robot is a skillful player, but wouldn't it be nice if it could do other cool things? In this stage, we will add the following activities for our robopet: working, learning, and oiling. Also, let's make it all more realistic. In life, accidents happen; the same is true for our program. It is known that robots dislike water. If during working or playing the robot encountered a puddle, a sprinkler, or a swimming pool, it increases the level of rust. Oiling the robot will help get rid of rust.</p>
+
+<p>So, first, let's add the parameter that will show us how rusty the robot got<em>. </em>The name of the parameter is <code class="java">rust</code>, the initial value is 0, and if it ever reaches 100, the robot is beyond repair. If that happens, the program should print the following message: <code class="java">{the name of the robot} is too rusty! Game over. Try again?</code>. Then, the game ends. Also, add this parameter to the <code class="java">info</code>.</p>
+
+<p>Second, to make our Tamagotchi yet more realistic, let's edit the battery and boredom parameters in the following way:</p>
+
+<ul>
+	<li>If the battery level drops to 0, the robot cannot do anything until it's recharged. If the user tries to interact with the tired robot in any other way than recharging, print <code class="java">The level of the battery is 0, {name of the robot} needs recharging!</code>.</li>
+	<li>If the level of boredom<em> </em>reaches 100, the robot gets depressed and cannot do anything. Print the following message motivating the user to play with the pet: <code class="java">{the name of the robot} is too bored! {the name of the robot} needs to have fun!</code>.</li>
+</ul>
+
+<p>Then, let's provide the robot with opportunities to learn new skills and do some work in addition to playing. Remember that active time is risky time, so some unpleasant things might happen to our robot while it's playing or working. It could step into a puddle, encounter a sprinkler, or even fall into the pool. Each of these mishaps makes our robot rustier by 10, 30, or 50 points, respectively. Such events happen randomly and their probabilities are equal. On a lucky day, they do not happen at all.</p>
+
+<p>Below is the list of interactions between the user and their robopet that should be implemented:</p>
+
+<ul>
+	<li><code class="java">learn</code> helps the robot acquire new skills. If the level of skill is 100, print the message <code class="java">There's nothing for {name of the robot} to learn!</code>. Otherwise, learning increases the level of skill by 10, decreases the level of the battery by 10, increases the level of overheat by 10, and increases the level of boredom by 5. Print an appropriate message for the user:<br>
+	<code class="java">{name of the robot}'s level of skill was {previous value}. Now it is {current value}.</code><br>
+	<code class="java">{name of the robot}'s level of overheat was {previous value}. Now it is {current value}.</code><br>
+	<code class="java">{name of the robot}'s level of the battery was {previous value}. Now it is {current value}.</code><br>
+	<code class="java">{name of the robot}'s level of boredom was {previous value}. Now it is {current value}.</code><br>
+	<code class="java">{name of the robot} has become smarter!</code></li>
+	<li><code class="java">work</code> is unpleasant, but you've got to do what you've got to do. If the level of skill is less than 50, print <code class="java">{name of the robot} has got to learn before working!</code>. Otherwise, working decreases the level of battery by 10, and increases the level of boredom and overheat by 10 each. It also might increase the level of rust, but it depends on unpleasant events. To reward the user and the pet, print <code class="java">{name of the robot} did well!</code>. Also, print all the changes in the robot's vitals in the following order: level of boredom, overheat, battery. If some unpleasant event took place, add the information about the event and its effect on the vitals.</li>
+	<li>An unpleasant event could happen during working or playing. <strong>Technically it happens at the end</strong>. One of the following events may take place: stepping into a puddle (increases the level of rust by 10), encountering a sprinkler (increases the level of rust by 30), or falling into the pool (increases the level of rust by 50). The respective messages are:<br>
+	<code class="java">Oh no, {name of the robot} stepped into a puddle!</code><br>
+	<code class="java">Oh, {name of the robot} encountered a sprinkler!</code>.<br>
+	<code class="java">Guess what! {name of the robot} fell into the pool!</code>, respectively.</li>
+	<li>After, print the message about the level of rust: <code class="java">{name of the robot}'s level of rust was {previous value}. Now it is {current value}.</code><br>
+	If our robot is lucky, nothing bad will happen. Each of the four possibilities (three unpleasant ones and the lucky one) happens with a 25% probability.</li>
+	<li><code class="java">play</code> is already implemented. All you have to do is add the possibility of an unpleasant event since they might take place during playing.</li>
+	<li>
+	<p><code class="java">oil</code> is the robot's medicine that helps with rust. If the rust level is zero, print <code class="java">{name of the robot} is fine, no need to oil!</code>. Otherwise, oiling decreases the rust level by 20. Print the following message after oiling:<br>
+	<code class="java">{name of the robot}'s level of rust was {previous value}. Now it is {current value}. {name of the robot} is less rusty!</code></p>
+	</li>
+</ul>
+
+<p>Finally, include the options <code class="java">work</code>, <code class="java"><span style="color: #000000;">learn</span></code>, and <code class="java">oil</code> in the interface. The list of available interactions will now look as follows:</p>
+
+<pre><code class="language-no-highlight">Available interactions with Daneel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills</code></pre>
+
+<h2>Objectives</h2>
+
+<p>In this stage, your program should:</p>
+
+<ol>
+	<li>Offer the following interactions: oiling, learning, recharging, sleeping, playing, and working;</li>
+	<li>Take the user's input and call a suitable method if the input is valid;</li>
+	<li>Otherwise, the program should inform the user and ask for a valid input;</li>
+	<li>In case of a random unpleasant event, the program should react to it.</li>
+</ol>
+
+<h2>Examples</h2>
+
+<p>The greater-than symbol followed by a space (<code class="java">&gt; </code>) represents the user's input. Note that it's not part of the input.</p>
+
+<p><strong>Example 1</strong></p>
+
+<pre><code class="language-no-highlight">How will you call your robot?
+&gt; Daniel
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; learn
+
+Daniel's level of skill was 0. Now it is 10.
+Daniel's level of overheat was 0. Now it is 10.
+Daniel's level of the battery was 100. Now it is 90.
+Daniel's level of boredom was 0. Now it is 5.
+
+Daniel has become smarter!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; oil
+
+Daniel is fine, no need to oil!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; learn
+
+Daniel's level of skill was 10. Now it is 20.
+Daniel's level of overheat was 10. Now it is 20.
+Daniel's level of the battery was 90. Now it is 80.
+Daniel's level of boredom was 5. Now it is 10.
+
+Daniel has become smarter!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; work
+
+Daniel has got to learn before working!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; play
+Which game would you like to play?
+&gt; numbers
+What is your number?
+&gt; 678
+
+The robot entered the number 483806.
+The goal number is 980924
+The robot won!
+
+What is your number?
+&gt; 6755
+
+The robot entered the number 7676.
+The goal number is 980924
+The robot won!
+
+What is your number?
+&gt; 99876
+
+The robot entered the number 969910.
+The goal number is 980924
+The robot won!
+
+What is your number?
+&gt; exit game
+
+You won: 0,
+The robot won: 3,
+Draws: 0.
+
+Oh, Daniel encountered a sprinkler!
+
+Daniel's level of rust was 0. Now it is 30.
+Daniel's level of overheat was 20. Now it is 30.
+Daniel's level of boredom was 10. Now it is 0.
+
+Daniel is in a great mood!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; learn
+
+Daniel's level of skill was 20. Now it is 30.
+Daniel's level of overheat was 30. Now it is 40.
+Daniel's level of the battery was 80. Now it is 70.
+Daniel's level of boredom was 0. Now it is 5.
+
+Daniel has become smarter!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; sleep
+
+Daniel's level of overheat was 40. Now it is 20.
+
+Daniel cooled off!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; learn
+
+Daniel's level of skill was 30. Now it is 40.
+Daniel's level of overheat was 20. Now it is 30.
+Daniel's level of the battery was 70. Now it is 60.
+Daniel's level of boredom was 5. Now it is 10.
+
+Daniel has become smarter!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; exit
+
+Game over</code></pre>
+
+<p><strong>Example 2</strong></p>
+
+<pre><code class="language-no-highlight">Choose:
+&gt; work
+
+Oh, Daniel encountered a sprinkler!
+
+Daniel's level of boredom was 40. Now it is 50.
+Daniel's level of overheat was 35. Now it is 45.
+Daniel's level of the battery was 50. Now it is 40.
+Daniel's level of rust was 10. Now it is 40.
+
+Daniel did well!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; sleep
+
+Daniel's level of overheat was 45. Now it is 25.
+
+Daniel cooled off!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; work
+
+Daniel's level of boredom was 50. Now it is 60.
+Daniel's level of overheat was 25. Now it is 35.
+Daniel's level of the battery was 40. Now it is 30.
+
+Daniel did well!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; work
+
+Oh, Daniel encountered a sprinkler!
+
+Daniel's level of boredom was 60. Now it is 70.
+Daniel's level of overheat was 35. Now it is 45.
+Daniel's level of the battery was 30. Now it is 20.
+Daniel's level of rust was 40. Now it is 70.
+
+Daniel did well!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; recharge
+
+Daniel's level of overheat was 45. Now it is 40.
+Daniel's level of the battery was 20. Now it is 30.
+Daniel's level of boredom was 70. Now it is 75.
+
+Daniel is recharged!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; work
+
+Guess what! Daniel fell into the pool!
+Daniel is too rusty! Game over. Try again?</code></pre>
+
+<p><strong>Example 3</strong></p>
+
+<pre><code class="language-no-highlight">Choose:
+&gt; learn
+
+Daniel's level of skill was 80. Now it is 90.
+Daniel's level of overheat was 60. Now it is 70.
+Daniel's level of the battery was 20. Now it is 10.
+Daniel's level of boredom was 40. Now it is 45.
+
+Daniel has become smarter!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; learn
+
+Daniel's level of skill was 90. Now it is 100.
+Daniel's level of overheat was 70. Now it is 80.
+Daniel's level of the battery was 10. Now it is 0.
+Daniel's level of boredom was 45. Now it is 50.
+
+Daniel has become smarter!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; learn
+
+The level of the battery is 0, Daniel needs recharging!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; learn
+
+The level of the battery is 0, Daniel needs recharging!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; recharge
+
+Daniel's level of overheat was 80. Now it is 75.
+Daniel's level of the battery was 0. Now it is 10.
+Daniel's level of boredom was 50. Now it is 55.
+
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; exit
+
+Game over</code></pre>
+
+<p><strong>Example 4</strong></p>
+
+<pre><code class="language-no-highlight">Choose:
+&gt; recharge
+
+Daniel's level of overheat was 25. Now it is 20.
+Daniel's level of the battery was 80. Now it is 90.
+Daniel's level of boredom was 90. Now it is 95.
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; info
+
+Daniel's stats are:
+the battery is 90,
+overheat is 20,
+skill level is 100,
+boredom is 95,
+rust is 0.
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; recharge
+
+Daniel's level of overheat was 20. Now it is 15.
+Daniel's level of the battery was 90. Now it is 100.
+Daniel's level of boredom was 95. Now it is 100.
+
+Daniel is recharged!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; sleep
+
+Daniel is too bored! Daniel needs to have fun!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; recharge
+
+Daniel is too bored! Daniel needs to have fun!
+
+Available interactions with Daniel:
+exit - Exit
+info - Check the vitals
+work - Work
+play - Play
+oil - Oil
+recharge - Recharge
+sleep - Sleep mode
+learn - Learn skills
+
+Choose:
+&gt; play
+
+Which game would you like to play?</code></pre>

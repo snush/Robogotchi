@@ -1,0 +1,104 @@
+<h2>Description</h2>
+
+<p>Tamagotchi is an electronic pet simulator. It was created in 1996 in Japan and quickly gained popularity all over the world. This small digital pet has several well-being parameters: level of hunger, happiness, health, and others. The point of the game is taking care of your pet: for example, feeding it to satisfy its hunger and playing games to make it happier.</p>
+
+<p>In this project, you will write a special kind of Tamagotchi called <strong>Robogotchi</strong> where the pet is not an animal but a robot. Even though it's not a living creature, it still requires care and attention: only instead of feeding it you charge it, instead of putting it to bed you switch it to the sleeping mode, and instead of meds it needs oil.</p>
+
+<p>Before creating the robot itself, let's think about how we will interact with it. As responsible pet owners, we need to make sure our robot doesn't get lonely or bored.</p>
+
+<p>In this stage, we will implement a simple game called Numbers. Here are the rules: first, a random number is generated in the interval from 0 to 1,000,000. Then, the robot player and the human player each provide a number. The player whose number is closer to the generated number wins. Inputting <code class="java">exit game</code> closes the game.</p>
+
+<p>Prompt the user with a message <code class="java">What is your number?</code>. Then, show the result in the following format:</p>
+
+<pre><code class="language-no-highlight">The robot entered the number N.
+The goal number is K.</code></pre>
+
+<p>Depending on the result, print one of the following messages: <code class="java">You won!</code>, <code class="java">The robot won!</code>, or <code class="java">It's a draw!</code>.</p>
+
+<p>Note that the user's number has to fall in the given range. If the user inputs a negative number, the program should print <code class="java">The number can't be negative!</code>. If the user provides a number larger than 1,000,000, print <code class="java">Invalid input! The number can't be bigger than 1000000</code>. Also, the user has to input a numeric value, so strings shouldn't be allowed. If the user inputs a string, the program should print the following message: <code class="java">A string is not a valid input!</code>.</p>
+
+<p>Finally, let's treat our users to some statistics. When the user exits the game, the stats should be printed in the following format: </p>
+
+<pre><code class="language-no-highlight">You won: {number of your wins},
+Robot won: {number of the robot's wins},
+Draws: {number of the draws}.</code></pre>
+
+<p><div class="alert alert-primary"> Delete the stats when starting a new game </div></p>
+
+<h2>Objectives</h2>
+
+<p>In this stage, your program should:</p>
+
+<ol>
+	<li>Take the user's input, check its validity, and ask again for a valid input if needed.</li>
+	<li>If the user provides an invalid option, the program has to display an appropriate message. All three invalid options — negative numbers, text strings, and numbers over 1,000,000 — have to be handled differently.</li>
+	<li>Output the result of the game.</li>
+	<li>Keep taking the input as long as the user wants to play.</li>
+	<li>Collect the game statistics and print it when the user decides to exit the game.</li>
+</ol>
+
+<h2>Examples</h2>
+
+<p>The greater-than symbol followed by a space (<code class="java">&gt; </code>) represents the user's input. Note that it's not part of the input.</p>
+
+<p><strong>Example 1</strong></p>
+
+<pre><code class="language-no-highlight">What is your number?
+&gt; -54
+
+The number can't be negative!
+
+What is your number?
+&gt; 45
+
+The robot entered the number 810376.
+The goal number is 63419.
+You won!
+
+What is your number?
+&gt; exit game
+
+You won: 1,
+The robot won: 0,
+Draws: 0.
+</code></pre>
+
+<p><strong>Example 2</strong></p>
+
+<pre><code class="language-no-highlight">What is your number?
+&gt; 5000001
+
+Invalid input! The number can't be bigger than 1000000.
+
+What is your number?
+&gt; 654
+
+The robot entered the number 235945.
+The goal number is 875951.
+The robot won!
+
+What is your number?
+&gt; 123123
+
+The robot entered the number 810808.
+The goal number is 875951.
+The robot won!
+
+What is your number?
+&gt; 432443
+
+The robot entered the number 555335.
+The goal number is 875951.
+The robot won!
+
+What is your number?
+&gt; pineapple
+
+A string is not a valid input!
+
+What is your number?
+&gt; exit game
+
+You won: 0,
+The robot won: 3,
+Draws: 0.</code></pre>
